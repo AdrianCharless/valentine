@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Will You Be My Valentine? 💕</title>
     <style>
-        * {
+                :root{
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+* {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -60,20 +65,28 @@
             color: #d63384;
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+
             opacity: 0;
-            animation: gradientFadeIn 2s ease-out forwards;
+            transform: translate3d(0, 10px, 0);
+            animation: wordReveal 900ms var(--ease-out) forwards;
+            will-change: transform, opacity;
         }
 
-        @keyframes gradientFadeIn {
+        @keyframes wordReveal {
             0% {
                 opacity: 0;
+                transform: translate3d(0, 12px, 0);
+                filter: blur(2px);
                 background: linear-gradient(90deg, transparent 0%, transparent 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 background-clip: text;
             }
-            50% {
-                background: linear-gradient(90deg, #d63384 0%, transparent 50%, transparent 100%);
+            60% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+                filter: blur(0);
+                background: linear-gradient(90deg, #d63384 0%, rgba(255,105,180,0.3) 60%, transparent 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 background-clip: text;
@@ -102,9 +115,18 @@
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(214, 51, 132, 0.3);
             border: 5px solid white;
+        
+            opacity: 0;
+            transform: scale(0.985);
+            animation: photoIn 450ms var(--ease-out) forwards;
+            will-change: transform, opacity;
         }
 
-        .photo-container.all-photos {
+        
+        @keyframes photoIn {
+            to { opacity: 1; transform: scale(1); }
+        }
+.photo-container.all-photos {
             height: auto;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -142,32 +164,34 @@
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 8px 20px rgba(214, 51, 132, 0.4);
-            transition: all 0.3s ease;
+            transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out), filter 220ms var(--ease-out);
+            will-change: transform, opacity;
             font-weight: bold;
         }
 
         button:hover {
-            transform: translateY(-3px);
+            transform: translate3d(0, -4px, 0);
+            filter: brightness(1.03);
             box-shadow: 0 12px 30px rgba(214, 51, 132, 0.5);
         }
 
         button:active {
-            transform: translateY(-1px);
+            transform: translate3d(0, -1px, 0) scale(0.99);
         }
 
         .heart {
             position: fixed;
             font-size: 30px;
-            animation: fall linear forwards;
+            animation: heartFall 5s var(--ease-inout) forwards;
             z-index: 1;
             pointer-events: none;
+            will-change: transform, opacity;
         }
 
-        @keyframes fall {
-            to {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
+        @keyframes heartFall {
+            0%   { transform: translate3d(0, -60px, 0) rotate(0deg) scale(1); opacity: 0; }
+            10%  { opacity: 1; }
+            100% { transform: translate3d(0, 105vh, 0) rotate(360deg) scale(1.05); opacity: 0; }
         }
 
         .message {
@@ -191,14 +215,24 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.7);
-            display: none;
+
+            display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10000;
+
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+
+            transition: opacity 260ms var(--ease-out), visibility 0ms linear 260ms;
         }
 
         .popup-overlay.show {
-            display: flex;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transition: opacity 260ms var(--ease-out), visibility 0ms;
         }
 
         .popup-content {
@@ -209,6 +243,15 @@
             box-shadow: 0 20px 60px rgba(214, 51, 132, 0.5);
             max-width: 500px;
             border: 5px solid #ff69b4;
+        
+            transform: translate3d(0, 10px, 0) scale(0.98);
+            opacity: 0;
+            transition: transform 320ms var(--ease-out), opacity 320ms var(--ease-out);
+        }
+
+        .popup-overlay.show .popup-content {
+            transform: translate3d(0, 0, 0) scale(1);
+            opacity: 1;
         }
 
         .popup-content h2 {
@@ -232,7 +275,8 @@
             border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s ease;
+            transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out), filter 220ms var(--ease-out);
+            will-change: transform, opacity;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
@@ -259,7 +303,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="intro-message" id="introMessage">For the prettiest girl in the world 💕</div>
+        <div class="intro-message" id="introMessage">Hi Beautiful. To my Sweet Girl 💕</div>
         
         <div class="words-container" id="wordsContainer"></div>
         
@@ -272,10 +316,10 @@
 
     <div class="popup-overlay" id="popupOverlay">
         <div class="popup-content">
-            <h2>So... what do you say? 💕</h2>
+            <h2>Will you be mine? 💕</h2>
             <div class="popup-buttons">
-                <button class="popup-button yes-button" onclick="handleYes()">Yes! 💖</button>
-                <button class="popup-button no-button" onclick="handleNo()">No 💔</button>
+                <button class="popup-button yes-button" onclick="handleYes()">Yes <br>I Will!💖</button>
+                <button class="popup-button no-button" onclick="handleNo()">No <br>I Hate You 💔</button>
             </div>
         </div>
     </div>
@@ -362,7 +406,7 @@
         }
 
         function handleYes() {
-            document.getElementById('popupOverlay').style.display = 'none';
+            document.getElementById('popupOverlay').classList.remove('show');
             
             // Show all 5 photos in a grid
             const photoContainer = document.getElementById('photoContainer');
@@ -379,7 +423,7 @@
             // Create celebration
             const message = document.createElement('div');
             message.className = 'message';
-            message.innerHTML = '🎉 YAY! You made me the happiest person ever! 💖✨🎊';
+            message.innerHTML = '🎉 YAY! I Love You soooooooo Much! 💖✨🎊';
             message.style.fontSize = '2em';
             document.getElementById('messageContainer').appendChild(message);
             
@@ -391,7 +435,7 @@
 
         function handleNo() {
             // Make the No button run away or just show a cute message
-            alert("Come on... give me another chance! 🥺💕");
+            alert("Damn... I knew you hated me... :( 🥺💕");
         }
     </script>
 </body>

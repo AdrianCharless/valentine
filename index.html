@@ -1,24 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Will You Be My Valentine? 💕</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Pacifico&display=swap"
+        rel="stylesheet">
     <style>
-                :root{
+        :root {
+            --primary: #ff4d6d;
+            --primary-dark: #c9184a;
+            --secondary: #ff8fa3;
+            --text-main: #2d3436;
+            --surface: rgba(255, 255, 255, 0.65);
             --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
             --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
         }
 
-* {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
         body {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #ffd1ff);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -26,23 +38,66 @@
             justify-content: center;
             overflow-x: hidden;
             position: relative;
+            color: var(--text-main);
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .glass-card {
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 800px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
         }
 
         .container {
-            text-align: center;
-            padding: 20px;
-            max-width: 800px;
+            /* Now handled by glass-card, kept for structure if needed */
             position: relative;
             z-index: 10;
         }
 
         .intro-message {
-            font-size: 2.5em;
-            color: #d63384;
-            font-weight: bold;
-            margin-bottom: 40px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            font-style: italic;
+            font-family: 'Pacifico', cursive;
+            font-size: 3em;
+            color: var(--primary);
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.5);
+            font-weight: normal;
         }
 
         .words-container {
@@ -52,7 +107,7 @@
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 15px;
+            gap: 4px;
         }
 
         .line-break {
@@ -61,42 +116,37 @@
         }
 
         .word {
-            font-size: 3em;
-            color: #d63384;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-
-            opacity: 0;
-            transform: translate3d(0, 10px, 0);
-            animation: wordReveal 900ms var(--ease-out) forwards;
-            will-change: transform, opacity;
+            display: none;
+            /* Hide original word class as we use SVG now */
         }
 
-        @keyframes wordReveal {
-            0% {
-                opacity: 0;
-                transform: translate3d(0, 12px, 0);
-                filter: blur(2px);
-                background: linear-gradient(90deg, transparent 0%, transparent 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
+        .word-svg {
+            height: 100px;
+            /* Adjust based on font size */
+            overflow: visible;
+        }
+
+        .word-text {
+            font-family: 'Pacifico', cursive;
+            font-size: 60px;
+            fill: transparent;
+            stroke: var(--primary);
+            stroke-width: 2.5px;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: trace 2s linear forwards, fillIn 1s var(--ease-out) 2s forwards;
+        }
+
+        @keyframes trace {
+            to {
+                stroke-dashoffset: 0;
             }
-            60% {
-                opacity: 1;
-                transform: translate3d(0, 0, 0);
-                filter: blur(0);
-                background: linear-gradient(90deg, #d63384 0%, rgba(255,105,180,0.3) 60%, transparent 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-            }
-            100% {
-                opacity: 1;
-                background: linear-gradient(90deg, #d63384 0%, #ff69b4 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
+        }
+
+        @keyframes fillIn {
+            to {
+                fill: var(--primary);
+                stroke: transparent;
             }
         }
 
@@ -115,18 +165,22 @@
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(214, 51, 132, 0.3);
             border: 5px solid white;
-        
+
             opacity: 0;
             transform: scale(0.985);
             animation: photoIn 450ms var(--ease-out) forwards;
             will-change: transform, opacity;
         }
 
-        
+
         @keyframes photoIn {
-            to { opacity: 1; transform: scale(1); }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
-.photo-container.all-photos {
+
+        .photo-container.all-photos {
             height: auto;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -156,23 +210,29 @@
         }
 
         button {
-            background: linear-gradient(135deg, #ff6b9d 0%, #d63384 100%);
+            padding: 18px 40px;
+            font-size: 1.3em;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             border: none;
-            padding: 20px 50px;
-            font-size: 1.5em;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(214, 51, 132, 0.4);
-            transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out), filter 220ms var(--ease-out);
-            will-change: transform, opacity;
-            font-weight: bold;
+            transition: all 0.3s var(--ease-out);
+            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.4);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
         }
 
         button:hover {
-            transform: translate3d(0, -4px, 0);
-            filter: brightness(1.03);
-            box-shadow: 0 12px 30px rgba(214, 51, 132, 0.5);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.5);
+        }
+
+        button:active {
+            transform: translateY(1px);
         }
 
         button:active {
@@ -189,9 +249,19 @@
         }
 
         @keyframes heartFall {
-            0%   { transform: translate3d(0, -60px, 0) rotate(0deg) scale(1); opacity: 0; }
-            10%  { opacity: 1; }
-            100% { transform: translate3d(0, 105vh, 0) rotate(360deg) scale(1.05); opacity: 0; }
+            0% {
+                transform: translate3d(0, -60px, 0) rotate(0deg) scale(1);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate3d(0, 105vh, 0) rotate(360deg) scale(1.05);
+                opacity: 0;
+            }
         }
 
         .message {
@@ -243,7 +313,7 @@
             box-shadow: 0 20px 60px rgba(214, 51, 132, 0.5);
             max-width: 500px;
             border: 5px solid #ff69b4;
-        
+
             transform: translate3d(0, 10px, 0) scale(0.98);
             opacity: 0;
             transition: transform 320ms var(--ease-out), opacity 320ms var(--ease-out);
@@ -301,17 +371,24 @@
         }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="intro-message" id="introMessage">Hi Beautiful. To my Sweet Girl 💕</div>
-        
-        <div class="words-container" id="wordsContainer"></div>
-        
-        <div class="photo-container" id="photoContainer"></div>
-        
-        <button id="clickBtn" onclick="handleClick()">Click Me! 💕</button>
-        
-        <div id="messageContainer"></div>
+    <div class="glass-card">
+        <div class="container">
+            <div class="intro-message" id="introMessage">Hi Beautiful. To my Sweet Girl 💕</div>
+
+            <div class="photo-container" id="photoContainer">
+                <!-- Photos will appear here -->
+            </div>
+
+            <div class="words-container" id="wordsContainer">
+                <!-- Words will appear here -->
+            </div>
+
+            <div id="messageContainer"></div>
+
+            <button id="clickBtn" onclick="handleClick()">Click Me! 💕</button>
+        </div>
     </div>
 
     <div class="popup-overlay" id="popupOverlay">
@@ -339,39 +416,48 @@
 
         function handleClick() {
             if (currentIndex < words.length) {
-                // Hide intro message on first click
                 if (currentIndex === 0) {
                     document.getElementById('introMessage').style.display = 'none';
                 }
-                
-                // Add word with gradient fade
-                const wordElement = document.createElement('div');
-                wordElement.className = 'word';
-                wordElement.textContent = words[currentIndex];
-                document.getElementById('wordsContainer').appendChild(wordElement);
 
-                // Add line break after "Be"
+                const wordContainer = document.getElementById('wordsContainer');
+                const word = words[currentIndex];
+                const width = Math.max(70, word.length * 30 + 10); // Tighter width approximation
+
+                const svgNS = "http://www.w3.org/2000/svg";
+                const svg = document.createElementNS(svgNS, "svg");
+                svg.classList.add("word-svg");
+                svg.setAttribute("viewBox", `0 0 ${width} 100`);
+
+                const text = document.createElementNS(svgNS, "text");
+                text.setAttribute("x", "50%");
+                text.setAttribute("y", "55%"); // Slightly lower to center visually
+                text.setAttribute("dominant-baseline", "middle");
+                text.setAttribute("text-anchor", "middle");
+                text.classList.add("word-text");
+                text.textContent = word;
+
+                svg.appendChild(text);
+                wordContainer.appendChild(svg);
+
+                // Add line break after "Be" to force new line
                 if (currentIndex === 2) {
                     const lineBreak = document.createElement('div');
                     lineBreak.className = 'line-break';
-                    document.getElementById('wordsContainer').appendChild(lineBreak);
+                    wordContainer.appendChild(lineBreak);
                 }
 
-                // Replace photo (show only one at a time)
                 if (currentIndex < photos.length) {
                     const photoContainer = document.getElementById('photoContainer');
                     photoContainer.innerHTML = `<img src="${photos[currentIndex]}" alt="Memory ${currentIndex + 1}">`;
                 }
 
-                // If it's the last word (Valentine?), make hearts rain
                 if (currentIndex === words.length - 1) {
                     document.getElementById('clickBtn').style.display = 'none';
                     startHeartRain();
-                    
-                    // Show popup after animation
                     setTimeout(() => {
                         document.getElementById('popupOverlay').classList.add('show');
-                    }, 7000);
+                    }, 4000);
                 }
 
                 currentIndex++;
@@ -397,36 +483,36 @@
             for (let i = 0; i < 30; i++) {
                 setTimeout(() => createHeart(), i * 100);
             }
-            
+
             // Continue creating hearts
             const interval = setInterval(createHeart, 300);
-            
+
             // Stop after 10 seconds
             setTimeout(() => clearInterval(interval), 10000);
         }
 
         function handleYes() {
             document.getElementById('popupOverlay').classList.remove('show');
-            
+
             // Show all 5 photos in a grid
             const photoContainer = document.getElementById('photoContainer');
             photoContainer.className = 'photo-container all-photos';
             photoContainer.innerHTML = '';
-            
+
             photos.forEach((photo, index) => {
                 const img = document.createElement('img');
                 img.src = photo;
                 img.alt = `Memory ${index + 1}`;
                 photoContainer.appendChild(img);
             });
-            
+
             // Create celebration
             const message = document.createElement('div');
             message.className = 'message';
             message.innerHTML = '🎉 YAY! I Love You soooooooo Much! 💖✨🎊';
             message.style.fontSize = '2em';
             document.getElementById('messageContainer').appendChild(message);
-            
+
             // More hearts!
             for (let i = 0; i < 50; i++) {
                 setTimeout(() => createHeart(), i * 50);
@@ -439,4 +525,5 @@
         }
     </script>
 </body>
+
 </html>
